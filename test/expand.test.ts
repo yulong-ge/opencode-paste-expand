@@ -6,17 +6,17 @@ function marker(lines: number): string {
   return `[Pasted ~${lines} lines]`
 }
 
-// Collapsed buffer model: the pasted content is hidden behind a virtual
-// extmark; input contains the marker text and source.text.start/end cover
-// the marker's current display extent.
+// Collapsed buffer model: part.text holds the ORIGINAL pasted text while the
+// visible input shows the marker text; source.text.start/end locate the
+// marker in the input and source.text.value is the marker itself.
 function paste(input: string, parts: PartLike[], content: string) {
   const start = promptOffsetWidth(input)
   const mark = marker(content.split("\n").length)
   const nextInput = input + mark + " "
   const part: PastedTextPart = {
     type: "text",
-    text: mark,
-    source: { text: { start, end: start + promptOffsetWidth(mark), value: content } },
+    text: content,
+    source: { text: { start, end: start + promptOffsetWidth(mark), value: mark } },
   }
   return { input: nextInput, parts: [...parts, part] }
 }

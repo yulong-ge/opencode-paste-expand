@@ -25,6 +25,9 @@ export function isPastedTextPart<Part extends PartLike>(part: Part): part is Pas
 
 /**
  * Expands the most recent collapsed paste placeholder in a prompt.
+ * `part.text` already holds the original pasted text; the extmark collapses
+ * `source.text.start..end` into `source.text.value` ("[Pasted ~N lines]").
+ * Expanding = restore `part.text` into the input and drop the source marker.
  * Returns null when nothing can be expanded.
  */
 export function expandLastPastedPlaceholder<Part extends PartLike>(
@@ -35,8 +38,8 @@ export function expandLastPastedPlaceholder<Part extends PartLike>(
   if (index === -1) return null
 
   const part = parts[index] as PastedTextPart & Part
-  const { start, end, value } = part.source!.text!
-  const nextInput = displaySlice(input, 0, start) + value + displaySlice(input, end)
+  const { start, end } = part.source!.text!
+  const nextInput = displaySlice(input, 0, start) + part.text + displaySlice(input, end)
 
   const nextParts = parts.map((item, i) => {
     if (i !== index) return item

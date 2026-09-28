@@ -22,6 +22,7 @@ const tui: TuiPlugin = async (api) => {
   const expand = (): boolean => {
     for (const ref of [sessionRef, homeRef]) {
       if (!ref?.focused) continue
+
       const expanded = expandLastPastedPlaceholder(ref.current.input, ref.current.parts)
       if (!expanded) continue
       ref.set({ input: expanded.input, parts: expanded.parts })
