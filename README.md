@@ -4,7 +4,7 @@ TUI plugin for [OpenCode](https://opencode.ai): paste once to insert a collapsed
 
 ## Behavior
 
-- Any paste (Cmd+V, Edit > Paste, or bracketed-paste sequences from your terminal) lands collapsed as usual.
+- Any paste (Cmd+V on macOS, Ctrl+V on Windows/Linux, Edit > Paste, or bracketed-paste sequences from your terminal) lands collapsed as usual.
 - Press the paste shortcut **again** while a placeholder exists → the **most recent** placeholder expands in place. Repeat to expand older placeholders one by one.
 - Once every placeholder is expanded, the paste shortcut falls through to normal pasting.
 - File/image attachments and agent mentions are untouched; only pasted-text placeholders expand.
@@ -12,21 +12,31 @@ TUI plugin for [OpenCode](https://opencode.ai): paste once to insert a collapsed
 
 ## Install
 
-Add to `tui.json` (project-level `tui.json` or `~/.config/opencode/tui.json`):
+Add to `~/.config/opencode/tui.json` (or `.opencode/tui.json` in a project):
 
 ```json
 {
-  "plugin": ["opencode-paste-expand"]
+  "plugin": ["git+https://github.com/yulong-ge/opencode-paste-expand.git"]
 }
 ```
 
-or a local checkout:
+Or pin a commit/tag:
+
+```json
+{
+  "plugin": ["git+https://github.com/yulong-ge/opencode-paste-expand.git#<commit-or-tag>"]
+}
+```
+
+Local checkout (for development):
 
 ```json
 {
   "plugin": ["file:///path/to/opencode-paste-expand"]
 }
 ```
+
+> **Important**: TUI plugins go in **`tui.json` / `tui.jsonc`**, not `opencode.json`. Both `tui.json` and `tui.jsonc` are read and their `plugin` arrays are merged — if you have a `tui.jsonc`, the plugin must be added there (it shadows nothing, but keeping the spec in one file avoids confusion).
 
 ## How it works
 
