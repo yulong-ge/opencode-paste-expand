@@ -1,0 +1,29 @@
+{
+  "name": "opencode-paste-expand",
+  "version": "0.1.0",
+  "description": "OpenCode TUI plugin: press Cmd+V again to expand a collapsed [Pasted ~N lines] placeholder",
+  "type": "module",
+  "exports": {
+    "./tui": "./src/index.tsx"
+  },
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.18.0",
+    "@opentui/core": "*",
+    "@opentui/solid": "*"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.18.32",
+    "@opentui/core": "^0.4.5",
+    "@opentui/solid": "^0.4.5",
+    "@types/bun": "^1.4.2",
+    "typescript": "^5.8.2"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yulong-ge/opencode-paste-expand"
+  }
+}
