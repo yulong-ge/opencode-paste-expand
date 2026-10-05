@@ -10,16 +10,17 @@
     "src"
   ],
   "peerDependencies": {
-    "@opencode-ai/plugin": ">=1.18.0",
     "@opentui/core": "0.4.5",
-    "@opentui/solid": "0.4.5"
+    "@opentui/solid": "0.4.5",
+    "@opentui/keymap": "0.4.5"
   },
   "devDependencies": {
-    "@opencode-ai/plugin": "^1.18.32",
+    "@opencode-ai/plugin": "1.18.32",
     "@opentui/core": "0.4.5",
     "@opentui/solid": "0.4.5",
     "@types/bun": "^1.4.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "@opentui/keymap": "0.4.5"
   },
   "license": "MIT",
   "repository": {
