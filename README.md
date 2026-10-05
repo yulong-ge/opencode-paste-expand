@@ -10,6 +10,8 @@ TUI plugin for [OpenCode](https://opencode.ai): paste once to insert a collapsed
 - File/image attachments and agent mentions are untouched; only pasted-text placeholders expand.
 - `app.toggle.paste_summary` honored automatically: if placeholder collapsing is disabled, the plugin is inert.
 
+This release uses OpenTUI 0.4.5, matching OpenCode 1.18.32–1.18.34. The renderer packages are pinned so Git installs use the same runtime as the host.
+
 ## Install
 
 Add to `~/.config/opencode/tui.json` (or `.opencode/tui.json` in a project):
