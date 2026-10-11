@@ -6,7 +6,9 @@ import type {
   TuiPromptRef,
   TuiSlotContext,
 } from "@opencode-ai/plugin/tui"
+import type { Plugin as TuiPluginV2 } from "@opencode/plugin/tui"
 import { expandLastPastedPlaceholder } from "./expand"
+import { setupV2 } from "./v2"
 
 const id = "opencode-paste-expand"
 
@@ -87,9 +89,10 @@ const tui: TuiPlugin = async (api) => {
   })
 }
 
-const plugin: TuiPluginModule & { id: string } = {
+const plugin: TuiPluginModule & TuiPluginV2.Definition = {
   id,
   tui,
+  setup: setupV2,
 }
 
 export default plugin

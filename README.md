@@ -10,11 +10,26 @@ TUI plugin for [OpenCode](https://opencode.ai): paste once to insert a collapsed
 - File/image attachments and agent mentions are untouched; only pasted-text placeholders expand.
 - `app.toggle.paste_summary` honored automatically: if placeholder collapsing is disabled, the plugin is inert.
 
-This release uses OpenTUI 0.4.5, matching OpenCode 1.18.32–1.18.34. The renderer packages are pinned so Git installs use the same runtime as the host.
+Version 0.2.0 supports both OpenCode v1 and v2. The v1 entry point keeps the
+PromptRef-based implementation for OpenCode 1.x. The v2 entry point uses the
+public TUI context and the focused editor's extmarks, so it does not replace
+the host prompt component or load a second OpenTUI runtime.
 
 ## Install
 
-Add to `~/.config/opencode/tui.json` (or `.opencode/tui.json` in a project):
+For OpenCode v2, add the package to `~/.config/opencode/cli.json` (or the
+project `opencode.json`):
+
+```json
+{
+  "plugins": [
+    "git+https://github.com/yulong-ge/opencode-paste-expand.git"
+  ]
+}
+```
+
+For OpenCode v1, add it to `~/.config/opencode/tui.json` (or
+`.opencode/tui.json` in a project):
 
 ```json
 {
@@ -38,17 +53,29 @@ Local checkout (for development):
 }
 ```
 
-> **Important**: TUI plugins go in **`tui.json` / `tui.jsonc`**, not `opencode.json`. Both `tui.json` and `tui.jsonc` are read and their `plugin` arrays are merged — if you have a `tui.jsonc`, the plugin must be added there (it shadows nothing, but keeping the spec in one file avoids confusion).
+> **Important**: OpenCode v2 uses `plugins` in `cli.json`/`opencode.json`.
+> OpenCode v1 uses `plugin` in `tui.json`/`tui.jsonc`. Keep only the config
+> entry for the OpenCode version you run.
 
 ## How it works
 
-The plugin registers replacements for the `session_prompt` and `home_prompt` host slots (rendering the same `api.ui.Prompt` component and forwarding the host's `ref` callback), so it gains the official `PromptRef` (`current`/`set`). A global `keyInput` "paste" listener — which fires before the textarea's `onPaste` — expands the latest placeholder via `PromptRef.set` and `preventDefault`s the paste when a placeholder existed.
+In OpenCode v1, the plugin registers replacements for the `session_prompt` and
+`home_prompt` host slots and expands through the official `PromptRef`. In
+OpenCode v2, it listens to the global paste event, remembers the original text
+when the host creates a collapsed placeholder extmark, and expands the newest
+remembered extmark with the editor's public editing primitives before allowing
+the next paste to continue.
 
 It also registers a palette command `opencode-paste-expand.expand` (category "Prompt") you can bind to any key in `tui.json` keybinds.
 
 ## Notes
 
-- Expanding via `ref.set` moves the cursor to the end of the buffer (same as OpenCode's own prompt restore).
+- The v2 bridge can remember placeholders created after the plugin loads. A
+  placeholder already persisted in a draft may not be expandable if its
+  original bytes were never observed by the plugin; the v2 API does not expose
+  the host's historical paste store.
+- Expanding via `ref.set` in v1 moves the cursor to the end of the buffer
+  (same as OpenCode's own prompt restore).
 - `ctrl+v` bound to `prompt.paste` (empty-clipboard fallback path) does not expand; only real paste events do.
 
 ## License
