@@ -78,6 +78,14 @@ It also registers a palette command `opencode-paste-expand.expand` (category "Pr
   (same as OpenCode's own prompt restore).
 - `ctrl+v` bound to `prompt.paste` (empty-clipboard fallback path) does not expand; only real paste events do.
 
+## Development verification
+
+- Keep OpenTUI imports type-only. Loading a second runtime can fail with `Environment variable "OPENTUI_FORCE_UNICODE" is already registered with different configuration`.
+- In `src/v2.ts`, delete the extmark range before setting the insertion cursor and inserting the original text. Deletion can move the cursor.
+- Run `bun test`, `bunx tsc --noEmit`, and `git diff --check`.
+- Pin and read back the exact plugin commit before testing. In a fresh TUI debug log, confirm `prepare`, `load`, and `setup`; a cached package alone does not prove loading.
+- Perform a real bracketed-paste check: the first paste collapses, and the second restores the original text without inserting another placeholder.
+
 ## License
 
 MIT
