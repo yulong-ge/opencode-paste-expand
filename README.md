@@ -59,32 +59,17 @@ Local checkout (for development):
 
 ## How it works
 
-In OpenCode v1, the plugin registers replacements for the `session_prompt` and
-`home_prompt` host slots and expands through the official `PromptRef`. In
-OpenCode v2, it listens to the global paste event, remembers the original text
-when the host creates a collapsed placeholder extmark, and expands the newest
-remembered extmark with the editor's public editing primitives before allowing
-the next paste to continue.
+For host-slot/PromptRef and public-editor runtime paths, see the [subsystem references](docs/subsystems/README.md).
 
 It also registers a palette command `opencode-paste-expand.expand` (category "Prompt") you can bind to any key in `tui.json` keybinds.
 
 ## Notes
 
-- The v2 bridge can remember placeholders created after the plugin loads. A
-  placeholder already persisted in a draft may not be expandable if its
-  original bytes were never observed by the plugin; the v2 API does not expose
-  the host's historical paste store.
-- Expanding via `ref.set` in v1 moves the cursor to the end of the buffer
-  (same as OpenCode's own prompt restore).
-- `ctrl+v` bound to `prompt.paste` (empty-clipboard fallback path) does not expand; only real paste events do.
+Compatibility notes and their reasons are recorded in [LESSONS.md](LESSONS.md).
 
 ## Development verification
 
-- Keep OpenTUI imports type-only. Loading a second runtime can fail with `Environment variable "OPENTUI_FORCE_UNICODE" is already registered with different configuration`.
-- In `src/v2.ts`, delete the extmark range before setting the insertion cursor and inserting the original text. Deletion can move the cursor.
-- Run `bun test`, `bunx tsc --noEmit`, and `git diff --check`.
-- Pin and read back the exact plugin commit before testing. In a fresh TUI debug log, confirm `prepare`, `load`, and `setup`; a cached package alone does not prove loading.
-- Perform a real bracketed-paste check: the first paste collapses, and the second restores the original text without inserting another placeholder.
+Start with [AGENTS.md](AGENTS.md). Development rules and checks live in [docs/code-standards.md](docs/code-standards.md).
 
 ## License
 
